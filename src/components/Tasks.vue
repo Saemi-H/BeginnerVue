@@ -1,8 +1,8 @@
 <template>
     <div>
         <div :key='task.id' v-for="task in tasks">
-            <!-- tasks = 아래있는 props에서 온 것? -->
-            <TaskItem @del-task="$emit('del-task', task.id)" :task='task'/>
+            <!-- emit이 된 것은 $emit 붙여줘야함 -->
+            <TaskItem @del-task="$emit('del-task', task.id)" :task='task' @toggle-item="$emit('toggle-item', task.id)"/>
         </div>
     </div>
 </template>
@@ -18,7 +18,7 @@ export default {
     components: {
         TaskItem,
     },
-    emits: ['del-task']
+    emits: ['del-task', 'toggle-item'],
 }
 </script>
 
