@@ -1,0 +1,7 @@
+{
+    "tasks": [
+        {"id": 0, "text": "study", "day": "Today", "reminder": true},
+        {"id": 1, "text": "go home", "day": "Tomorrow", "reminder": false},
+        {"id": 2, "text": "work", "day": "Day after tomorrow"," reminder": true}
+      ]
+}

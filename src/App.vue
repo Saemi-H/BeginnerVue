@@ -1,47 +1,72 @@
 <template>
-  <!-- <div id="app"> -->
+  <div id="app">
     <div class="container">
-    <Header title='Hello Vue World'/>
+    <Header title='Task Track' @toggle-add-task='toggleAddTask' :showAddTask="showAddTask"/>
+    <div v-if='showAddTask'>
+    <!-- <div v-show='showAddTask'> -->
+       <AddTask @add-task='AddTask'/>
+    </div>
+   
     <Tasks :tasks='tasks' @del-task='delItem' @toggle-item='toggleItem'/>
+  </div>
   </div>
 </template>
 
 <script>
 import Header from './components/Header'
 import Tasks from './components/Tasks'
+import AddTask from './components/AddTask'
+import axios from 'axios'
 
 export default {
   name: 'App',
   components: {
    Header,
-   Tasks
+   Tasks,
+   AddTask
   },
   data(){
     return{
-      task: []
+      tasks: [],
+      showAddTask: false
     }
   },
   methods:{
+    toggleAddTask(){
+      this.showAddTask = !this.showAddTask
+    },
+    AddTask(task){
+      this.tasks=[...this.tasks, task]
+    },
     delItem(id){
-      this.tasks=this.tasks.filter(task=> task.id !== id)
+      if(confirm('Are you sure?')){
+        this.tasks=this.tasks.filter((task)=> task.id !== id)
+      }
+      
       //console.log(this.tasks)
     },
     toggleItem(id){
-      console.log(id, this.tasks[id].reminder, this.tasks[id].text)
-      console.log(this.task)
-     this.reminder = !this.reminder
-     console.log( this.reminder = !this.reminder)
+     this.tasks = this.tasks.map(task=> task.id === id ? {...task, reminder: !task.reminder} : task)
+    },
+    fetchTasks(){
+      axios.get('http://localhost:5000/tasks')
+      .then(res => {
+        console.log("success fetchTasks",res.data)
+        this.tasks = res.data
+      })
+      .catch(function(error){
+        console.log(error.message)
+      })
     }
-    // (id) = index 번호와 동일. id == index 또는 id-1을 쓴다
-
   },
   created(){
-    this.tasks = [
-      {id: 0, text: 'study', day: 'Today', reminder: true,},
-      {id: 1, text: 'go home', day: 'Tomorrow', reminder: false,},
-      {id: 2, text: 'work', day: 'Day after tomorrow', reminder: true,},
-    ]
-  }
+    this.fetchTasks()
+    // [
+    //   {id: 0, text: 'study', day: 'Today', reminder: true,},
+    //   {id: 1, text: 'go home', day: 'Tomorrow', reminder: false,},
+    //   {id: 2, text: 'work', day: 'Day after tomorrow', reminder: true,},
+    // ]
+  },
 }
 </script>
 

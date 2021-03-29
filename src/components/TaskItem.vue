@@ -1,10 +1,10 @@
 <template>
     <!-- <div class="task"> -->
-    <div :class="[task.reminder ? 'reminder' : '', 'task']" @click="onToggle(task.id)">
+    <div :class="[task.reminder ? 'reminder' : '', 'task']" @dblclick="onToggle(task.id)">
         <h3>{{task.text}}
             <i @click = 'onDel(task.id)' class="fas fa-times"></i>    
         </h3>
-        <p v-if='task.reminder === true'>{{task.day}}</p>
+        <p v-if='task.reminder'>{{task.day}}</p>
     </div>
 </template>
 
