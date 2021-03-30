@@ -35,7 +35,7 @@ export default {
                 return
             }
             const newTask = {
-                id:Math.floor(Math.random()*100000),
+                // id:Math.floor(Math.random()*100000), -> json 서버 만들면 json 서버에서 아이디 생성하므로 삭제
                 text: this.text,
                 day: this.day,
                 reminder: this.reminder

@@ -1,48 +1,33 @@
 <template>
-  <div id="app">
-    <div class="container">
-    <Header title='Task Track' @toggle-add-task='toggleAddTask' :showAddTask="showAddTask"/>
-   <!-- <div v-if='showAddTask'>
-          //<div v-show='showAddTask'>
+<div>
+        <div v-if='showAddTask'>
+    <!-- <div v-show='showAddTask'> -->
        <AddTask @add-task='AddTask'/>
     </div>
-   
     <Tasks :tasks='tasks' @del-task='delItem' @toggle-item='toggleItem'/>
-    -->
-  </div>
- 
-  <router-view :showAddTask="showAddTask"></router-view>
-  <!-- Home.vue에 showAddTask props로 내려줌 -->
-  <Footer />
-  </div>
+</div>
 </template>
 
 <script>
-import Header from './components/Header'
-import Footer from './components/Footer'
-// import Tasks from './components/Tasks'
-// import AddTask from './components/AddTask'
-
-
+import Tasks from '../components/Tasks'
+import AddTask from '../components/AddTask'
+import axios from 'axios'
 export default {
-  name: 'App',
-  components: {
-   Header,
-   Footer,
-  //  Tasks,
-  //  AddTask
-  },
-  data(){
-    return{
-      // tasks: [],
-      showAddTask: false
-    }
-  },
-  methods:{
-    toggleAddTask(){
-      this.showAddTask = !this.showAddTask
+    name:'Home',
+    props:{
+        showAddTask: Boolean,
     },
-    /*
+    data(){  
+        return{
+            tasks: [],
+        }
+    },
+    components:{
+        Tasks,
+        AddTask
+    },
+     methods:{
+   
     async AddTask(task){
       const res = await fetch(`api/tasks`,{
         method: 'POST',
@@ -109,7 +94,6 @@ export default {
         console.log(error.message)
       })
     }
-    */
   },
   created(){
     this.fetchTasks()
@@ -121,18 +105,3 @@ export default {
   },
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-.btn{
-  background-color: aquamarine;
-  border: none;
-}
-</style>
