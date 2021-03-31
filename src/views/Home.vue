@@ -11,7 +11,7 @@
 <script>
 import Tasks from '../components/Tasks'
 import AddTask from '../components/AddTask'
-import axios from 'axios'
+// import axios from 'axios'
 export default {
     name:'Home',
     props:{
@@ -74,6 +74,7 @@ export default {
 
     //  this.tasks = this.tasks.map(task=> task.id === id ? {...task, reminder: !task.reminder} : task)
     },
+    /*
     fetchTasks(){
       axios.get('api/tasks')
       .then(res => {
@@ -84,8 +85,19 @@ export default {
         console.log(error.message)
       })
     },
+    */
+    fetchTasks(){
+     fetch('api/tasks')
+      .then(res => {
+        console.log("success fetchTasks",res.data)
+        this.tasks = res.data
+      })
+      .catch(error=>{
+        console.log(error.message)
+      })
+    },
      fetchTask(id){
-      axios.get(`api/tasks/${id}`)
+      fetch(`api/tasks/${id}`)
       .then(res => {
         console.log("success fetchTasks",res.data)
         this.tasks = res.data
