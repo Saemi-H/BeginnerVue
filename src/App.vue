@@ -9,6 +9,7 @@
    
     <Tasks :tasks='tasks' @del-task='delItem' @toggle-item='toggleItem'/>
     -->
+    <Home ref="home"/>
   </div>
  
   <router-view :showAddTask="showAddTask"></router-view>
@@ -20,6 +21,7 @@
 <script>
 import Header from './components/Header'
 import Footer from './components/Footer'
+import Home from './views/Home'
 // import Tasks from './components/Tasks'
 // import AddTask from './components/AddTask'
 
@@ -28,6 +30,7 @@ export default {
   name: 'App',
   components: {
    Header,
+   Home,
    Footer,
   //  Tasks,
   //  AddTask
@@ -111,8 +114,18 @@ export default {
     }
     */
   },
+  mounted()
+  {
+    console.log("mounted :"+this.$refs);
+    console.log("mounted :"+this.$refs.home);
+    this.$refs.home.fetchTasks();
+  },
   created(){
-    this.fetchTasks()
+   // console.log("created :"+this.$refs);
+    //console.log("created :"+this.$refs.home);
+    //console.log("created :"+this.$refs.Home);
+    //this.$refs.home.fetchTasks();
+   // this.fetchTasks()
     // [
     //   {id: 0, text: 'study', day: 'Today', reminder: true,},
     //   {id: 1, text: 'go home', day: 'Tomorrow', reminder: false,},

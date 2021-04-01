@@ -28,55 +28,55 @@ export default {
     },
      methods:{
    
-    async AddTask(task){
-      const res = await fetch(`api/tasks`,{
-        method: 'POST',
-        header: {
-          'Content-type' : 'application/json',
-        },
-        body: JSON.stringify(task)
-      })
+      async AddTask(task){
+        const res = await fetch(`/api/tasks`,{
+          method: 'POST',
+          header: {
+            'Content-type' : 'application/json',
+          },
+          body: JSON.stringify(task)
+        })
       // get req가 아닌 post req여야 하므로. 
 
-      const data= await res.json()
-      this.tasks=[...this.tasks, data]
-      // 새로운 data가 원래 tasks 에 추가됨
-    },
-    async delItem(id){
-      if(confirm('Are you sure?')){
-        // json에서 delete
-        const res = await fetch(`api/tasks/${id}`,{
-          method:'DELETE'
+        const data= await res.json()
+        this.tasks=[...this.tasks, data]
+        // 새로운 data가 원래 tasks 에 추가됨
+      },
+      async delItem(id){
+        if(confirm('Are you sure?')){
+          // json에서 delete
+          const res = await fetch(`/api/tasks/${id}/`,{
+            method:'DELETE'
+          })
+
+          res.status === 200 ? (this.tasks=this.tasks.filter((task)=> task.id !== id)) : alert('error deleting task')
+
+          // this.tasks=this.tasks.filter((task)=> task.id !== id)
+        }
+        
+        //console.log(this.tasks)
+      },
+      async toggleItem(id){
+        const taskToToggle = await this.fetchTask(id)
+        const updTask = {...taskToToggle, reminder:!taskToToggle.reminder}
+        // json 파일 설치 후 토글
+
+        const res=await fetch(`/api/tasks/${id}/`, {
+          method: 'PUT',
+          headers:{
+            'Content-type' : 'application/json'
+          },
+          body:JSON.stringify(updTask)
         })
 
-        res.status === 200 ? (this.tasks=this.tasks.filter((task)=> task.id !== id)) : alert('error deleting task')
+        const data = await res.json()
+        this.tasks = this.tasks.map(task=> task.id === id ? {...task, reminder: !data.reminder} : task)
 
-        // this.tasks=this.tasks.filter((task)=> task.id !== id)
-      }
-      
-      //console.log(this.tasks)
-    },
-    async toggleItem(id){
-      const taskToToggle = await this.fetchTask(id)
-      const updTask = {...taskToToggle, reminder:!taskToToggle.reminder}
-      // json 파일 설치 후 토글
-
-      const res=await fetch(`api/tasks/${id}`, {
-        method: 'PUT',
-        headers:{
-          'Content-type' : 'application/json'
-        },
-        body:JSON.stringify(updTask)
-      })
-
-      const data = await res.json()
-      this.tasks = this.tasks.map(task=> task.id === id ? {...task, reminder: !data.reminder} : task)
-
-    //  this.tasks = this.tasks.map(task=> task.id === id ? {...task, reminder: !task.reminder} : task)
-    },
+      //  this.tasks = this.tasks.map(task=> task.id === id ? {...task, reminder: !task.reminder} : task)
+      },
     /*
     fetchTasks(){
-      axios.get('api/tasks')
+      axios.get('/api/tasks')
       .then(res => {
         console.log("success fetchTasks",res.data)
         this.tasks = res.data
@@ -86,29 +86,39 @@ export default {
       })
     },
     */
-    fetchTasks(){
-     fetch('api/tasks')
+      async fetchTasks(){
+        const res = await fetch('/api/tasks')
+        const data = await res.json();
+        //return data
+        console.log("fetchTasks executed :"+JSON.stringify(data))
+        this.tasks=data
+        console.log(await fetch(`/api/tasks/`))
+        
+      },
+    /* fetch('http://localhost:5000/tasks')
       .then(res => {
-        console.log("success fetchTasks",res.data)
+        console.log("success fetchTasks home",res)
+        console.log("success fetchTasks home data",res.data)
         this.tasks = res.data
       })
       .catch(error=>{
         console.log(error.message)
       })
+    },*/
+   /*  fetchTask(id){
+      fetch(`/api/tasks/${id}`)
+      .then(res => {
+        console.log("success fetchTasks home 2",res.data)
+        this.tasks = res.data
+      })
+      .catch(error=>{
+        console.log(error.message)
+      })
+    }*/
     },
-     fetchTask(id){
-      fetch(`api/tasks/${id}`)
-      .then(res => {
-        console.log("success fetchTasks",res.data)
-        this.tasks = res.data
-      })
-      .catch(error=>{
-        console.log(error.message)
-      })
-    }
-  },
   created(){
-    this.fetchTasks()
+    console.log("home created()");
+    //this.fetchTasks()
     // [
     //   {id: 0, text: 'study', day: 'Today', reminder: true,},
     //   {id: 1, text: 'go home', day: 'Tomorrow', reminder: false,},
